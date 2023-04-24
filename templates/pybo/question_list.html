@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
+{% load pybo_filter %}
 {% block content %}
-{# container my-3, thead-dark 등이 --> 부트스트랩이 제공하는 클래스#}
 <div class="container my-3">
     <table class="table">
         <thead>
-        <tr class="thead-dark">
+        <tr class="table-dark">
             <th>번호</th>
             <th>제목</th>
             <th>작성일시</th>
@@ -14,9 +14,19 @@
         {% if question_list %}
         {% for question in question_list %}
         <tr>
-            <td>{{ forloop.counter }}</td>
             <td>
-                <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
+                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                {{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}
+            </td>
+            <td>
+                <a href="{% url 'pybo:detail' question.id %}">
+                    {{ question.subject }}
+                    {% if question.answer_set.count > 0 %}
+                        <span class="text-danger small mx-2">
+                            {{ question.answer_set.count }}
+                        </span>
+                    {% endif %}
+                </a>
             </td>
             <td>{{ question.create_date }}</td>
         </tr>
