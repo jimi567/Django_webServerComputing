@@ -4,7 +4,7 @@
 <div class="container my-3">
     <table class="table">
         <thead>
-        <tr class="text-center table-dark">
+        <tr class="text-center thead-dark">
             <th>번호</th>
             <th style="width:50%">제목</th>
             <th>글쓴이</th>
@@ -20,16 +20,19 @@
                 {{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}
             </td>
             <td class="text-left">
-                <a href="{% url 'pybo:detail' question.id %}">
-                    {{ question.subject }}
-                    {% if question.answer_set.count > 0 %}
-                        <span class="text-danger small mx-2">
-                            {{ question.answer_set.count }}
-                        </span>
-                    {% endif %}
-                </a>
+                <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
+                {% if question.answer_set.count > 0 %}
+                <span class="text-danger small ml-2">답변수:{{question.answer_set.count }}</span>
+                {% endif %}
+
+            <!-- 과제4 로 추가된 부분 -->
+                {% if question.comment_set.count > 0 %}
+                <span class="text-danger small ml-2">댓글수: {{ question.comment_set.count }}</span>
+                {% endif %}
+            <!-- 과제4 로 추가된 부분 -->
+
             </td>
-            <td>{{ question.author.username }}</td> <!--글쓴이 추가 -->
+            <td>{{ question.author.username }}</td>  <!-- 글쓴이 추가 -->
             <td>{{ question.create_date }}</td>
         </tr>
         {% endfor %}
